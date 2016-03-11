@@ -1,0 +1,290 @@
+\documentclass[svgnames]{beamer}
+\usepackage{movie15}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+
+%\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+% \mode<presentation>{\usetheme{Ilmenau}} % Ilmenau
+% \mode<presentation>{\usetheme{Warsaw}} % Warsaw
+\mode<presentation>{\usetheme{Frankfurt}} % Frankfurt
+% \mode<presentation>{\usetheme{Darmstadt}} % Darmstadt
+
+% toc before each section
+% \AtBeginSection[]
+% {
+% \begin{frame}{Table of Contents}
+% \tableofcontents[currentsection]
+% \end{frame}
+% }
+
+% \AtBeginSection{\frame{\sectionpage}}
+% \AtBeginSubsection{\frame{\subsectionpage}}
+% \AtBeginSubsubsection{\frame{\subsubsectionpage}}
+
+% add number of page
+\beamertemplatenavigationsymbolsempty
+\setbeamerfont{page number in head/foot}{}
+\setbeamertemplate{footline}[frame number]
+
+% progress bar
+\useoutertheme{progressbar}
+\progressbaroptions{titlepage=normal}
+\progressbaroptions{headline=sections,frametitle=normal}
+
+
+% add number of page
+% \addtobeamertemplate{navigation symbols}{}{%
+%     \usebeamerfont{footline}%
+%     \usebeamercolor[fg]{footline}%
+%     \hspace{1em}%
+%     \insertframenumber/\inserttotalframenumber
+% }
+
+% remove symbols
+\setbeamertemplate{navigation symbols}{}
+
+% headers
+\title{Kerberos}
+\author{Laurentiu Capatina \& Quentin Lemaire}
+\date{\today}
+
+% content
+\begin{document}
+  
+\maketitle % build title
+
+% introduction
+\section*{Introduction}
+
+\begin{frame}
+  \frametitle{Introduction}
+  \begin{itemize}
+    \item Cryptographie symétrique
+    \item Serveur de distribution de clés
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sommaire}
+  \tableofcontents
+\end{frame}
+
+%% ------- %%
+
+\section{Serveur de distribution de clés}
+
+\begin{frame}
+  \frametitle{Serveur de distribution de clés}
+  \tableofcontents[currentsection, hideothersubsections]
+\end{frame}
+
+
+\subsection{Problème}
+\begin{frame}
+  \frametitle{Problème}
+  
+  Comment établir une clé de session entre 2 personnes ?
+  
+  \pause
+  
+  % DH ? Pas d'authentification
+  \begin{alertblock}{Diffie Helman ?}
+    Pas d'authentification
+  \end{alertblock}
+  
+  \pause
+  
+  $\Rightarrow$ Utilisation d'un \textbf{tiers de confiance}
+  
+%   \begin{exampleblock}{Utilisation d'un tiers de confiance}
+%     
+%   \end{exampleblock}
+\end{frame}
+
+
+\subsection{Principe}
+\begin{frame}
+ \frametitle{Tiers de confiance}
+% Un tiers de confiance possède toutes les clés et 
+% sert à établir des communications entre les acteurs
+
+% TODO schéma : KDC possède des clés partagées avec chaque utilisateur
+% le KDC s'occupe de mettre en relation les utilisateurs en fournissant
+% des clés de session de manière sécurisée
+\end{frame}
+
+\subsection{Protocole Needham-Schroeder}
+\begin{frame}
+  \frametitle{Protocole Needham-Schroeder}
+
+% TODO schéma
+% explications : prévention du rejeu + mutal authentification
+
+% TODO on parle de l'invalidation de ticket ?
+
+%   \begin{figure}[h!t]
+%   \begin{center}
+%     \only<1>{\fbox{\includegraphics[width=\textwidth]{media/CSRF_attack_0.png}}} % actors
+%     \only<2>{\fbox{\includegraphics[width=\textwidth]{media/CSRF_attack_1.png}}} % 1
+%     \caption{
+%       CSRF attack scenario.
+%       \tiny{\textit{Realized with Dia: \url{https://wiki.gnome.org/Apps/Dia/}.}}
+%     }
+%   \end{center}
+%   \end{figure}
+
+%  \begin{figure}[ht]
+%    \includemovie[poster,text={\small(Loading Video...)}]{6cm}{4cm}{media/video.avi}
+%  \end{figure}
+
+\end{frame}
+
+\section{Kerberos}
+
+\begin{frame}
+  \frametitle{Kerberos}
+  \tableofcontents[currentsection, hideothersubsections]
+\end{frame}
+
+\subsection{Protocole}
+
+\begin{frame}
+ \frametitle{Protocole}
+ 
+% TODO diagramme 
+% TODO explication tickets
+% TODO avantages : SSO
+% TODO inconvénients : 3rd party (tiers)
+\end{frame}
+
+\begin{frame}
+ \frametitle{Avantages \& Inconvénients}
+ 
+ % TODO
+ \begin{exampleblock}{Avantages}
+  \begin{itemize}
+   \item Single-Sign-On (SSO) ;
+   \item Les mots de passe ne passent pas par le réseau ;
+  \end{itemize}
+ \end{exampleblock}
+ 
+ \pause
+ 
+ % TODO
+ \begin{alertblock}{Inconvénients}
+  \begin{itemize}
+   \item Tiers possédant l'ensemble des mots de passe ;
+  \end{itemize}
+ \end{alertblock}
+\end{frame}
+
+\subsection{Implémentations}
+
+\begin{frame}
+  \frametitle{Implémentations}
+  
+  % TODO séparer en 2 blocs
+  \begin{itemize}
+   \item MIT depuis XXXX : version XX % TODO
+   \item Heimdal depuis XXXX : version XX % TODO
+  \end{itemize}
+  
+  % TODO petite comparaison rapide et histoire des 2 implémentations principales
+  
+  % \pause
+  % $\Rightarrow$ dans le cadre de la démonstration, utilisation de l'implémentation MIT de Kerberos version 5
+\end{frame}
+
+
+% TODO voir si on parle de toutes les attaques
+\subsection{Attaques}
+
+\begin{frame}
+ \frametitle{Attaques}
+ 
+ \begin{enumerate}
+  \item Rejeu
+  \item Vol de ticket
+  \item Attaque offline par dictionnaire
+ \end{enumerate}
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{Rejeu}
+ 
+ % TODO schéma rapide : expliquer l'attaque
+\end{frame}
+
+\begin{frame}
+ \frametitle{Vol de ticket}
+ 
+ % Hôte non sécurisé
+ % TODO petite anecdote golden ticket
+ % TODO révocation tickets Kerberos (regarder de la doc)
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Attaque offline par dictionnaire}
+ % TODO explications:
+ % 1- envoi d'un message à l'AS
+ % 2- réponse par un message chiffré à l'aide du mot de passe de l'utilisateur usurpé
+ % 3- attaque offline par dictionnaire pour récupérer le mot de passe 
+ 
+ 
+ % => C'est cette attaque que nous allons vous montrer !
+\end{frame}
+
+
+\section{Démonstration}
+
+\begin{frame}
+  \frametitle{Démonstration}
+  \tableofcontents[currentsection, hideothersubsections]
+\end{frame}
+
+\subsection{Récupération d'un mot de passe}
+% TODO voir si on fait une vidéo
+\begin{frame}
+ \frametitle{Récupération d'un mot de passe}
+ 
+ \begin{center}
+  Démonstration !
+ \end{center}
+\end{frame}
+
+
+\subsection{Comment s'en prémunir ?}
+
+\begin{frame}
+ \frametitle{Comment s'en prémunir ?}
+ 
+ \textbf{Pré-authentification}
+ % TODO pre-auth
+ % Implémentée depuis la version 5 MIT
+\end{frame}
+
+%% ------- %%
+
+% Conclusion
+\section*{Conclusion}
+\begin{frame}
+  \frametitle{Conclusion}
+  
+  % TODO Kerberos sert à faire de l'authentification mais en aucun cas de l'autorisation.
+  
+  % TODO => souvent bindé avec un LDAP pour faire ça.
+
+\end{frame}
+
+
+% Questions ?
+\begin{frame}
+  \frametitle{Merci}
+  \begin{center}
+    Merci pour votre attention. Question(s) ?
+  \end{center}
+\end{frame}
+
+\end{document}
