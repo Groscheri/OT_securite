@@ -120,6 +120,8 @@
 % - le KDC possède des clés partagées avec chaque utilisateur
 % - le KDC s'occupe de mettre en relation les utilisateurs en fournissant
 % des clés de session de manière sécurisée
+
+% ==> OK mais comment on fait ?
 \end{frame}
 
 \subsection{Protocole Needham-Schroeder}
@@ -128,6 +130,19 @@
 
 % TODO schéma
 % explications : prévention du rejeu + mutal authentification
+
+  \begin{figure}[h!t]
+    \begin{center}
+      \only<1>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_1.png}} % actors
+      \only<2>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_2.png}} % 2
+      \only<3>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_3.png}} % 3
+      \only<4>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_4.png}} % 4
+      \only<5>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_5.png}} % 5
+      \only<6>{\includegraphics[width=0.9\textwidth]{images/needham_schroeder_6.png}} % 6
+      \caption{Établissement d'une clé de session entre Alice et Bob.}
+    \end{center}    
+  \end{figure}
+  
 
 % TODO on parle de l'invalidation de ticket ?
 
