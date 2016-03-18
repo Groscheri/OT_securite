@@ -83,7 +83,9 @@
 \begin{frame}
   \frametitle{Problème}
   
-  Comment établir une clé de session entre 2 personnes ?
+  \begin{center}
+    Comment établir une clé de session entre 2 personnes ?
+  \end{center}
   
   \pause
   
@@ -108,8 +110,15 @@
 % Un tiers de confiance possède toutes les clés et 
 % sert à établir des communications entre les acteurs
 
-% TODO schéma : KDC possède des clés partagées avec chaque utilisateur
-% le KDC s'occupe de mettre en relation les utilisateurs en fournissant
+  \begin{figure}[h!t]
+    \begin{center}
+      \includegraphics[width=\textwidth]{images/kdc.png} % KDC
+      \caption{Serveur de Distribution de Clés (KDC en anglais)}
+    \end{center}    
+  \end{figure}
+
+% - le KDC possède des clés partagées avec chaque utilisateur
+% - le KDC s'occupe de mettre en relation les utilisateurs en fournissant
 % des clés de session de manière sécurisée
 \end{frame}
 
