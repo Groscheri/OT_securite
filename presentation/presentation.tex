@@ -84,7 +84,7 @@
   \frametitle{Problème}
   
   \begin{center}
-    Comment établir une clé de session entre 2 personnes ?
+    Comment établir une clé de session entre 2 personnes ? % mutuellement authentifiées ?
   \end{center}
   
   \pause
@@ -128,7 +128,6 @@
 \begin{frame}
   \frametitle{Protocole Needham-Schroeder}
 
-% TODO schéma
 % explications : prévention du rejeu + mutal authentification
 
   \begin{figure}[h!t]
@@ -142,47 +141,72 @@
       \caption{Établissement d'une clé de session entre Alice et Bob.}
     \end{center}    
   \end{figure}
-  
 
-% TODO on parle de l'invalidation de ticket ?
-
-%   \begin{figure}[h!t]
-%   \begin{center}
-%     \only<1>{\fbox{\includegraphics[width=\textwidth]{media/CSRF_attack_0.png}}} % actors
-%     \only<2>{\fbox{\includegraphics[width=\textwidth]{media/CSRF_attack_1.png}}} % 1
-%     \caption{
-%       CSRF attack scenario.
-%       \tiny{\textit{Realized with Dia: \url{https://wiki.gnome.org/Apps/Dia/}.}}
-%     }
-%   \end{center}
-%   \end{figure}
-
-%  \begin{figure}[ht]
-%    \includemovie[poster,text={\small(Loading Video...)}]{6cm}{4cm}{media/video.avi}
-%  \end{figure}
-
+% TODO
+% Problème de ce protocole :
+% Invalidation de ticket => impossible de savoir si un 
+% ticket est "neuf" si Alice se fait voler sa clé par 
+% un attaquant
 \end{frame}
+
+
+
+% à partir de NS => Kerberos
 
 \section{Kerberos}
 
 \begin{frame}
   \frametitle{Kerberos}
+  
+  % Kerberos vient de "Cerbère" le chien qui garde les enfers
+  % Projet initié par le MIT 
+  % Protocole d'authentification basé sur le protocole NS
+  % Utilisation de tickets
+  % Évite de stocker des mots de passe en local et de les faire passer sur le réseau
+  
   \tableofcontents[currentsection, hideothersubsections]
 \end{frame}
 
 \subsection{Protocole}
 
 \begin{frame}
- \frametitle{Protocole}
+ \frametitle{Protocole : tickets}
  
-% TODO diagramme 
-% TODO explication tickets
-% TODO avantages : SSO
-% TODO inconvénients : 3rd party (tiers)
+  \begin{definition}
+   Un ticket est une \textbf{preuve d'identité}.
+   Chiffré avec la clé du service auprès duquel 
+   l'utilisateur est authentifié. % => donc non forgeable
+  \end{definition}
+  
+  \pause
+
+  \vfill
+  
+  % Dans Kerberos =>
+  Authentification en 2 étapes~:
+  \begin{enumerate}
+   \item Récupération d'un \textit{Ticket Granting Ticket} (TGT); % SSO
+   \item Récupération de plusieurs \textit{Ticket Granting Service} (TGS) à l'aide du TGT. % Invisible pour l'utilisateur
+  \end{enumerate}
+  
 \end{frame}
 
 \begin{frame}
+ \frametitle{Protocole : communications}
+ % TODO diagramme 
+%   2 serveurs dédiés~:
+%   \begin{itemize}
+%    \item \textit{Authentication Server} (AS) ;
+%    \item \textit{Ticket Granting Server} (TGS).
+%   \end{itemize}
+\end{frame}
+
+
+\begin{frame}
  \frametitle{Avantages \& Inconvénients}
+ 
+% TODO avantages : SSO
+% TODO inconvénients : 3rd party (tiers)
  
  % TODO
  \begin{exampleblock}{Avantages}
@@ -275,6 +299,10 @@
  
  \begin{center}
   Démonstration !
+  
+  %  \begin{figure}[ht]
+  %    \includemovie[poster,text={\small(Loading Video...)}]{6cm}{4cm}{media/video.avi}
+  %  \end{figure}
  \end{center}
 \end{frame}
 
