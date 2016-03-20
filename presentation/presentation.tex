@@ -290,6 +290,11 @@
 
 \begin{frame}
  \frametitle{Attaque offline par dictionnaire}
+   \begin{itemize}
+   \item Envoi d'un message à l'AS
+   \item Réponse est chiffré avec le mot de passe de l'utilisateur
+   \item Utilisation d'un dictionnaire pour récupérer le mot de passe
+  \end{itemize}
  % TODO explications:
  % 1- envoi d'un message à l'AS
  % 2- réponse par un message chiffré à l'aide du mot de passe de l'utilisateur usurpé
@@ -329,7 +334,7 @@
  
  \begin{block}{Pré-authentification}
   \begin{itemize}
-   \item Chiffrement d'un timestamp avec le mot de passe de l'utilisateur
+   \item Chiffrement du timestamp avec le mot de passe de l'utilisateur
    \item Vérification du timestamp contre un rejeu
    \item Syncronisation de l'heure des machines est obligatoire
   \end{itemize}
@@ -345,9 +350,23 @@
 \begin{frame}
   \frametitle{Conclusion}
   
+  \begin{exampleblock}{Avantages de Kerberos}
+  \begin{itemize}
+   \item Kerberos sert à faire de l'authentification
+   \item Cela est réalisé à l'aide d'un tiers de confiance et sans le passage d'un mot de passe longue durée sur le réseau
+     \end{itemize}
+   \end{exampleblock}
+
+
   % TODO Kerberos sert à faire de l'authentification mais en aucun cas de l'autorisation.
   
   % TODO => souvent bindé avec un LDAP pour faire ça.
+ \begin{alertblock}{Attention}
+   \begin{itemize}
+    \item Kerberos NE gère PAS l'autorisation!
+    \item Cela doit être gerée au niveau applicatif
+   \end{itemize}
+  \end{alertblock}
 
 \end{frame}
 
