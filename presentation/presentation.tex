@@ -56,13 +56,13 @@
 % introduction
 \section*{Introduction}
 
-\begin{frame}
-  \frametitle{Introduction}
-  \begin{itemize}
-    \item Cryptographie symétrique
-    \item Serveur de distribution de clés
-  \end{itemize}
-\end{frame}
+% \begin{frame}
+%   \frametitle{Introduction}
+%   \begin{itemize}
+%     \item Cryptographie symétrique
+%     \item Serveur de distribution de clés
+%   \end{itemize}
+% \end{frame}
 
 \begin{frame}
   \frametitle{Sommaire}
@@ -142,7 +142,6 @@
     \end{center}    
   \end{figure}
 
-% TODO
 % Problème de ce protocole :
 % Invalidation de ticket => impossible de savoir si un 
 % ticket est "neuf" si Alice se fait voler sa clé par 
@@ -173,9 +172,11 @@
  \frametitle{Protocole : tickets}
  
   \begin{definition}
-   Un ticket est une \textbf{preuve d'identité}.
-   Chiffré avec la clé du service auprès duquel 
-   l'utilisateur est authentifié. % => donc non forgeable
+   Un ticket est une \textbf{preuve d'identité}. Opaque (chiffré) pour l'utilisateur, 
+   il permet d'authentifier celui-ci auprès d'une autre personne ou 
+   d'un service.
+   % Chiffré avec la clé du service auprès duquel 
+   % l'utilisateur est authentifié. % => donc non forgeable
   \end{definition}
   
   \pause
@@ -193,7 +194,20 @@
 
 \begin{frame}
  \frametitle{Protocole : communications}
- % TODO diagramme 
+ 
+  \begin{figure}[h!t]
+    \begin{center}
+      \only<1>{\includegraphics[width=0.9\textwidth]{images/kerberos_1.png}} % actors
+      \only<2>{\includegraphics[width=0.9\textwidth]{images/kerberos_2.png}} % 2
+      \only<3>{\includegraphics[width=0.9\textwidth]{images/kerberos_3.png}} % 3
+      \only<4>{\includegraphics[width=0.9\textwidth]{images/kerberos_4.png}} % 4
+      \only<5>{\includegraphics[width=0.9\textwidth]{images/kerberos_5.png}} % 5
+      \only<6>{\includegraphics[width=0.9\textwidth]{images/kerberos_6.png}} % 6
+      \only<7>{\includegraphics[width=0.9\textwidth]{images/kerberos_7.png}} % 7
+      %\caption{Communication entre machine}
+    \end{center}    
+  \end{figure}
+ 
 %   2 serveurs dédiés~:
 %   \begin{itemize}
 %    \item \textit{Authentication Server} (AS) ;
@@ -205,23 +219,21 @@
 \begin{frame}
  \frametitle{Avantages \& Inconvénients}
  
-% TODO avantages : SSO
-% TODO inconvénients : 3rd party (tiers)
- 
- % TODO
  \begin{exampleblock}{Avantages}
   \begin{itemize}
-   \item Single-Sign-On (SSO) ;
-   \item Les mots de passe ne passent pas par le réseau ;
+   \item Single-Sign-On (SSO)~;
+   \item Les mots de passe ne passent pas sur le réseau~;
+   \item Authentification mutuelle entre les acteurs.
   \end{itemize}
  \end{exampleblock}
  
  \pause
  
- % TODO
  \begin{alertblock}{Inconvénients}
   \begin{itemize}
-   \item Tiers possédant l'ensemble des mots de passe ;
+   \item Tiers possédant l'ensemble des mots de passe (dérivés) ;
+   \item Difficile à interfacer avec certains applicatifs (``kerbérisation'' nécessaire) ;
+   \item Les postes clients deviennent sensibles. % on ne peut pas faire de SSO sans gagner en sécurité
   \end{itemize}
  \end{alertblock}
 \end{frame}
@@ -231,29 +243,24 @@
 \begin{frame}
   \frametitle{Implémentations}
   
-  % TODO séparer en 2 blocs
   \begin{itemize}
-   \item MIT depuis XXXX : version 1.13.4 % TODO
-   \item Heimdal depuis XXXX : version 1.5.2 % TODO
+   % implémentation MIT sujette à la réglementation américaine concernant l'exportation de cryptographie => implémentation du DES
+   \item \textit{Massachusetts Institute of Technology} (\textbf{MIT}) version US~; % version 1.13.4
+   \item \textbf{Heimdal} : version non-US (Suède)~; % version 1.5.2
+   \item Active Directory de Microsoft.
   \end{itemize}
-  
-  % TODO petite comparaison rapide et histoire des 2 implémentations principales
-  
-  % \pause
-  % $\Rightarrow$ dans le cadre de la démonstration, utilisation de l'implémentation MIT de Kerberos version 5
 \end{frame}
 
 
-% TODO voir si on parle de toutes les attaques
 \subsection{Attaques}
 
 \begin{frame}
  \frametitle{Attaques}
  
  \begin{enumerate}
-  \item Rejeu
-  \item Vol de ticket
-  \item Attaque offline par dictionnaire
+  \item Rejeu~;
+  \item Vol de ticket~;
+  \item Attaque offline par dictionnaire.
  \end{enumerate}
 
 \end{frame}
@@ -272,30 +279,30 @@
  %Pass the ticket
  \begin{block}{Pass-the-ticket}
   \begin{itemize}
-   \item TGT ne contient pas l'identification physique de la machine émettrice
-   \item Le transfer sur un autre poste permet toujours l'utilisation du TGT
+   \item TGT ne contient pas l'identification physique de la machine émettrice~;
+   \item Le transfert sur un autre poste permet toujours l'utilisation du TGT.
   \end{itemize}
  \end{block}
  
  %Golden ticket
  \begin{block}{Golden ticket}
   \begin{itemize}
-   \item Vulnérabilité découverte dans Active Directory
-   \item Possibilité de générer des TGTs arbitraires après récuperation du hash KRBTGT
+   \item Vulnérabilité découverte dans Active Directory ;
+   \item Possibilité de générer des TGTs arbitraires après récuperation du hash KRBTGT.
   \end{itemize}
  \end{block}
- % TODO révocation tickets Kerberos (regarder de la doc)
+ % révocation tickets Kerberos (regarder de la doc)
 \end{frame}
 
 
 \begin{frame}
  \frametitle{Attaque offline par dictionnaire}
    \begin{itemize}
-   \item Envoi d'un message à l'AS
-   \item Réponse est chiffré avec le mot de passe de l'utilisateur
-   \item Utilisation d'un dictionnaire pour récupérer le mot de passe
+   \item Demande de TGT à l'AS (\textit{AS-REQ})~;
+   \item L'AS envoie le TGT chiffré avec le mot de passe de l'utilisateur sans s'assurer que la demande est légitime (\textit{AS-REP}).
   \end{itemize}
- % TODO explications:
+  
+  $\Rightarrow$ Attaque par dictionnaire possible~! % comme pour WPA
  % 1- envoi d'un message à l'AS
  % 2- réponse par un message chiffré à l'aide du mot de passe de l'utilisateur usurpé
  % 3- attaque offline par dictionnaire pour récupérer le mot de passe 
@@ -313,16 +320,14 @@
 \end{frame}
 
 \subsection{Récupération d'un mot de passe}
-% TODO voir si on fait une vidéo
 \begin{frame}
  \frametitle{Récupération d'un mot de passe}
  
  \begin{center}
   Démonstration !
   
-  %  \begin{figure}[ht]
-  %    \includemovie[poster,text={\small(Loading Video...)}]{6cm}{4cm}{media/video.avi}
-  %  \end{figure}
+  
+
  \end{center}
 \end{frame}
 
@@ -334,12 +339,16 @@
  
  \begin{block}{Pré-authentification}
   \begin{itemize}
-   \item Chiffrement du timestamp avec le mot de passe de l'utilisateur
-   \item Vérification du timestamp contre un rejeu
-   \item Syncronisation de l'heure des machines est obligatoire
+   \item L'utilisateur qui effectue la demande de TGT chiffre le timestamp avec son mot de passe pour légitimer la requête~;
+   \item Kerberos vérifie le chiffrement du timestamp avant de répondre~;
+   \item Il est important que l'heure des machines soit synchronisée. % via NTP par exemple
   \end{itemize}
  \end{block}
- % TODO pre-auth
+ 
+ \pause
+ 
+ $\Rightarrow$ La première mise sur le réseau d'un texte chiffré avec le mot de passe de l'utilisateur est maintenant à la charge de l'utilisateur (légitime).
+
  % Implémentée depuis la version 5 MIT
 \end{frame}
 
@@ -350,21 +359,18 @@
 \begin{frame}
   \frametitle{Conclusion}
   
-  \begin{exampleblock}{Atouts de Kerberos}
+\begin{exampleblock}{Kerberos}
   \begin{itemize}
-   \item Kerberos sert à faire de l'authentification
-   \item Cela est réalisé à l'aide d'un tiers de confiance et sans le passage d'un mot de passe longue durée sur le réseau
-     \end{itemize}
-   \end{exampleblock}
-
-
-  % TODO Kerberos sert à faire de l'authentification mais en aucun cas de l'autorisation.
+   \item permet l'\textbf{authentification} et le SSO~;
+   \item est un tiers de confiance critique pour les infrastructures~;
+   \item basé sur le protocole de Needham-Schroeder et défini dans la RFC 4120. 
+   \end{itemize}
+ \end{exampleblock}
   
-  % TODO => souvent bindé avec un LDAP pour faire ça.
  \begin{alertblock}{Attention}
    \begin{itemize}
-    \item Kerberos NE gère PAS l'autorisation!
-    \item Cela doit être gerée au niveau applicatif
+    \item Kerberos NE gère PAS l'\textbf{autorisation}~!
+    \item Cela doit être geré à un autre niveau (applicatifs, LDAP~?)
    \end{itemize}
   \end{alertblock}
 
