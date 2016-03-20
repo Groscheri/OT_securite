@@ -4,7 +4,17 @@
 #include <stdio.h>
 
 #define MAX_ALLOC 1024
+#define STR_ALLOC 100
+#define DISPLAY_EACH 100
 #define DEBUG 0
+
+
+int decrypt (const char* pass_str, const char* salt_str);
+int find_password(const char* salt_str, char* password);
+
+void handle_error(krb5_error_code code);
+void debug_segfault();
+
 
 static krb5_context ctx;
 
@@ -28,21 +38,79 @@ void handle_error(krb5_error_code code) {
 
 
 int main (int argc, char** argv) {
-	const char *pass_str;
 	const char *salt_str = "OTSECU.COMkrbadmin"; /* default salt */
-	krb5_error_code code;
-	const char* errmsg;
-	unsigned int i = 0; // index
+	char* password;
+	int ret;
 
-	if (argc != 2 && argc != 3) {
-		fprintf(stderr, "Usage: decrypt password [salt]\n");
+	if (argc != 1 && argc != 2) {
+		fprintf(stderr, "Usage: decrypt [salt] < wordlist.txt\n");
 		exit(1);
 	}
 
-	pass_str = argv[1];
-	if (argc == 3) {
-		salt_str = argv[2]; // get salt from command line
+	if (argc == 2) {
+		salt_str = argv[1]; // get salt from command line
 	}
+
+	password = malloc(STR_ALLOC*sizeof(char));
+	ret = find_password(salt_str, password);
+	
+	if (ret == 0) {
+		fprintf(stdout, "Mot de passe trouvé : %s\n", password);
+	}
+	else {
+		fprintf(stdout, "Mot de passe introuvable !\n");
+	}
+	free(password);
+
+	return 0;
+
+}
+
+
+int find_password(const char* salt_str, char* password) {
+	char *line = NULL;
+	char *current;
+	size_t size;
+	int code, i;
+	unsigned int j;
+
+	i = 0;
+
+	while(getline(&line, &size, stdin) != EOF) {
+		/* remove '\n' and set '\0' at the end */
+		for (j = 0; j < size; ++j) {
+			if (line[j] == '\n') {
+				line[j] = '\0';
+				size = j;
+				break;
+			}
+		}
+		#if DEBUG
+		fprintf(stdout, "Line size: %d\n", size);
+		#endif
+
+		i++;
+
+		if (i % DISPLAY_EACH == 0) {
+			fprintf(stdout, "Reading line: %6d %6s\n", i, line);
+		}
+
+		#if DEBUG
+		fprintf(stdout, "Execute decrypt with: [PASS=%s, SALT=%s]\n", line, salt_str);
+		#endif
+
+		if (decrypt(line, salt_str) == 0) {
+			strcpy(password, line); // copy line into password
+			return 0;
+		}
+	}
+	return 1; // introuvable
+}
+
+int decrypt (const char* pass_str, const char* salt_str) {
+	krb5_error_code code;
+	const char* errmsg;
+	unsigned int i = 0; // index
 
 	krb5_init_context(&ctx);
 
@@ -66,7 +134,10 @@ int main (int argc, char** argv) {
 	salt.length = strlen(salt.data);
 
 	code = krb5_c_string_to_key(ctx, enctype, &pwd, &salt, keyblock);
-	handle_error(code);
+	/* handle_error(code); */
+	if (code) {
+		return 1;
+	}
 
 	/* display key */
 	#if DEBUG
@@ -104,7 +175,10 @@ int main (int argc, char** argv) {
 
 	/* decryption */
 	code = krb5_c_decrypt(ctx, keyblock, KRB5_KEYUSAGE_AS_REP_ENCPART, 0, &enc_out, &plain);
-	handle_error(code);
+	/* handle_error(code); */
+	if (code) {
+		return 2;
+	}
 
 	/* display plain text */
 	#if DEBUG
