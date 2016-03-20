@@ -1,4 +1,7 @@
 *.pdf
+*.autosave
+*.dia
+*.swp
 *.toc
 *.out
 *.backup
